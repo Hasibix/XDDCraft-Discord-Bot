@@ -1,59 +1,50 @@
 const client = require("../index.js");
-const { MessageEmbed, Discord } = require("discord.js")
-const db = require('quick.db')
+const createCaptcha = require('../captcha');
+const fsC = require('fs').promises;
 
+client.on('guildMemberAdd', async member => {
+      if(member.bot) return;
 
-client.on('guildMemberAdd', async(member) => { // this event gets triggered when a new member joins the server!
-    // Firstly we need to define a channel
-    // either using .get or .find, in this case im going to use .get()
-    const Channel = member.guild.channels.cache.get('792316994136965130') //insert channel id that you want to send to
-    //making embed
-    const embed = new MessageEmbed()
-        .setColor('GREEN')
-        .setTitle('New Member')
-        .setDescription(`**${member.displayName}** welcome to ${member.guild.name}, we now have ${member.guild.memberCount} members!`)
-    // sends a message to the channel
-    Channel.send(embed)
-})  
+      await member.roles.add('884717884188819476');
 
-client.on('guildMemberAdd', async (member) => {
-    if(db.has(`captcha-${member.guild.id}`)=== false) return;
-    const url = 'https://api.no-api-key.com/api/v2/captcha';
+    const captcha = await createCaptcha();
+    try {
+        const msg = await member.send('You have 30 sec to solve the captcha', {
+            files: [{
+                attachment: `./captchas/${captcha}.png`,
+                name: `${captcha}.png`
+            }]
+        });
         try {
-            fetch(url)
-                .then(res => res.json())
-                .then(async json => {
-                    console.log(json)
-                    const msg = await member.send(
-                        new MessageEmbed()
-                            .setTitle('Please enter the captcha')
-                            .setImage(json.captcha)
-                            .setColor("RANDOM")
-                    )
-                    try {
-                        const filter = (m) => {
-                            if(m.author.bot) return;
-                            if(m.author.id === member.id && m.content === json.captcha_text) return true;
-                            else {
-                                msg.channel.send("You have answered the captcha incorrectly!")
-                            }
-                        };
-                        const response = await msg.channel.awaitMessages(filter, {
-                            max : 1,
-                            time : 10000,
-                            errors : ['time']
-                        })
-                        if(response) {
-                            msg.channel.send('Congrats, you have answered the captcha.')
-                        }
-                    } catch (error) {
-                        msg.channel.send(`You have been kicked from **${member.guild.name}** for not answering the captcha correctly.`)
-                        member.kick()
-                    }
-                })
-        } catch (error) {
-            console.log(error)
+            const filter = m => {
+                if(m.author.bot) return;
+                if(m.author.id === member.id && m.content === captcha) return true;
+                else {
+                    m.channel.send('You entered the captcha incorrectly. Rejoin the server!');
+                    member.kick()
+                    return false;
+                }
+            };
+            const response = await msg.channel.awaitMessages(filter, { max: 1, time: 30000, errors: ['time']});
+            if(response) {
+                await msg.channel.send('You have verified yourself!');
+                await member.roles.remove('884717884188819476');
+                await member.roles.add('884717954170757160');
+                await fsC.unlink(`./captchas/${captcha}.png`)
+                    .catch(err => console.log(err));
+            }
         }
-})
+        catch(err) {
+            console.log(err);
+            await msg.channel.send('You did not solve the captcha correctly on time.');
+            await member.kick();
+            await fsC.unlink(`./captchas/${captcha}.png`)
+                    .catch(err => console.log(err));
+        }
+    }
+    catch(err) {
+        console.log(err);
+    }
+});
 
-  
+

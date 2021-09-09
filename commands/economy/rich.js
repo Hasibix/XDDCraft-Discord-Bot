@@ -2,7 +2,7 @@ const { Client, Message, MessageEmbed } = require('discord.js')
 module.exports = {
     name : 'rich',
     category : 'economy',
-    aliases : ['lb'],
+    aliases : [],
     description : 'swagshit: money money',
     
     /**

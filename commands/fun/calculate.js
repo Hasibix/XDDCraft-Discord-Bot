@@ -63,7 +63,7 @@ module.exports = {
       if(!args[2]) return message.channel.send("Input second number to calculate!");
       
       
-      if(isNaN(args[0] || args[2])) return message.channel.send("Dude do you want to calculate a w-word????!? b-but how??")
+      if(isNaN(args[0]) || isNaN(args[2])) return message.channel.send("Dude do you want to calculate a w-word????!? b-but how??")
       
      
 

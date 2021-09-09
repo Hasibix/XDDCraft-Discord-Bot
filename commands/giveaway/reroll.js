@@ -2,7 +2,7 @@ const ms = require('ms');
 
 const { Client, Message, MessageEmbed } = require('discord.js')
 module.exports = {
-    name : 'reroll',
+    name : 'giveaway-reroll',
     category : 'giveaway',
     aliases : [''],
     description : 'rerolls giveaway winner',

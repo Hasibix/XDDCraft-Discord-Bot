@@ -1,3 +1,13 @@
+const http = require('http');
+
+const requestListener = function (req, res) {
+  res.writeHead(200);
+  res.end('Hello, World!');
+}
+
+const server = http.createServer(requestListener);
+server.listen(8080);
+console.log("http server is ready!")
 // index.js
 
 require("dotenv").config();
@@ -13,8 +23,8 @@ client.db = Eco.db;
 const config = require('./config.json')
 const prefix = config.prefix;
 const prefixNormal = config.prefix;
-const musicPrefix = config.prefixMusic;
 const giveawayPrefix = config.prefixGiveaway;
+//economy shop items
 client.shop = {
   "laptop": {
     cost: 5000
@@ -28,6 +38,7 @@ client.shop = {
 
 };
 client.config = config;
+//giveaway config
 const { GiveawaysManager } = require('discord-giveaways');
 client.giveawaysManager = new GiveawaysManager(client, {
     storage: "./database.json",
@@ -38,6 +49,7 @@ client.giveawaysManager = new GiveawaysManager(client, {
         reaction: "🎉"
     }
 });
+//other things
 const token = process.env.BOT_TOKEN
 const mongoose = require("mongoose")
 mongoose.connect(process.env.MONGO_DB)
@@ -49,22 +61,29 @@ client.categories = fs.readdirSync("./commands/");
     require(`./handlers/${handler}`)(client);
 }); 
 
-client.gCommands = new Collection();
-client.gAliases = new Collection();
-client.gCategories = fs.readdirSync("./gCommands/");
-["gCommand"].forEach(handler => {
-    require(`./gHandlers/${handler}`)(client);
-});
-
-client.mCommands = new Collection();
-client.mAliases = new Collection();
-client.mCategories = fs.readdirSync("./mCommands/");
-["mCommand"].forEach(handler => {
-    require(`./mHandlers/${handler}`)(client);
-}); 
-
-
 client.login(token)
 
 
+//level and xp system
+const Levels = require("discord-xp");
+Levels.setURL(process.env.MONGO_DB);
 
+client.on("message", async (message) => {
+
+ if (!message.guild) return;
+
+ if (message.author.bot) return;
+
+  const randomAmountOfXp = Math.floor(Math.random() * 29) + 1; // Min 1, Max 30
+
+ const hasLeveledUp = await Levels.appendXp(message.author.id, message.guild.id, randomAmountOfXp);
+
+ if (hasLeveledUp) {
+
+   const user = await Levels.fetch(message.author.id, message.guild.id);
+
+   message.channel.send(`${message.author}, congratulations! You have leveled up to **${user.level}**. :tada:`);
+
+ }
+
+});

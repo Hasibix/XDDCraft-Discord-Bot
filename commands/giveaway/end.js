@@ -2,7 +2,7 @@ const ms = require('ms');
 
 const { Client, Message, MessageEmbed } = require('discord.js')
 module.exports = {
-    name : 'end',
+    name : 'giveaway-end',
     category : 'giveaway',
     aliases : [''],
     description : 'ends giveaway',

@@ -1,32 +1,67 @@
- const { MessageEmbed } = require("discord.js");
+const Discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
   name: "ban",
-  category : 'mod',
-  aliases : ['banhammer'],
-  description: "bans the mentioned user",
-  run : async(client, message, args) => {
-    const noPermmissionEmbed = new MessageEmbed()
-    .setDescription("<:XDDCraft_X:792256780158631966> I'm missing the following permissions: Ban Members")
-    .setColor("RED");
-  const banEmbed = new MessageEmbed()
-  .setDescription(`<:socsoss:882993071644622898> _**${Member.user.tag} has been banned**_`)
-  .setColor("GREEN");
-  if(!message.guild.me.hasPermission('BAN_MEMBERS')) return message.channel.send(noPermissionEmbed)
-  const Member = message.mentions.members.first();
-  if(!Member) {
-    message.channel.send(":x: | Please specify a user to ban!");
-    } else await Member.ban({ reason: args.slice(1).join(" ")});
-  message.channel.send(banEmbed);
+  aliases: [],
+  description: "Ban A Member!",
+  run: async (client, message, args) => {
+    //Start
+    const Color = 'GREEN';
+    if (!message.member.hasPermission("BAN_MEMBERS"))
+      return message.channel.send(
+        `You Don't Have Permission To Use This Command!`
+      );
 
-}
-}
+    let Member = message.mentions.users.first();
 
-// /home/runner/FUCKGODIEBITCH/commands/mod/ban.js:12
-  //const banEmbed = mew MessageEmbed()
-    //                   ^^^^^^^^^^^^
+    if (!Member)
+      return message.channel.send(
+        `Please Mention A Member That You Want To Ban!`
+      );
 
-// SyntaxError: Unexpected identifier
-// Hint: hit control+c anytime to enter REPL.
-//  
+    if (!message.guild.members.cache.get(Member.id))
+      return message.channel.send(`Please Mention A Valid Member!`);
 
+    if (Member.id === message.author.id)
+      return message.channel.send(`You Can't Ban Your Self!`);
+
+    if (Member.id === client.user.id)
+      return message.channel.send(`Please Don't Ban Me ;-;`);
+
+    if (Member.id === message.guild.owner.user.id)
+      return message.channel.send(`You Can't Ban Owner Of Server!`);
+
+    let Reason = args.slice(1).join(" ");
+
+    let User = message.guild.member(Member);
+
+    if (!User.bannable) return message.channel.send(`I Can't Ban That Member!`);
+
+    try {
+      console.log(`Member Is Going To Get Ban!`);
+      setTimeout(function() {
+        User.ban({ reason: `${Reason || "No Reason Provided!"}` });
+      }, 2000);
+      if (User && Member.bot === false)
+        Member.send(
+          `You Have Been Banned From **${message.guild.name}** For ${Reason ||
+            "No Reason Lmao"}`
+        );
+      message.channel.send(`${Member.tag} has been banned! Reason: ${Reason || "No Reason Lmfao"}`)
+      console.log(
+        `User: ${Member.tag} (${Member.id}) Just Got Banned From ${
+          message.guild.name
+        } For ${Reason || "No Reason Lmao"}`
+      );
+    } catch (error) {
+      return message.channel
+        .send(
+          `I Can't Ban That Member Maybe Member Has Higher Role Than Me & My Role Is Lower Than Member!`
+        )
+        .then(() => console.log(error));
+    }
+
+    //End
+  }
+};
