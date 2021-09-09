@@ -6,4 +6,4 @@ This is our offical discord bot source code. If you want, you can use this code 
 BOT_TOKEN=YOUR_BOT_TOKEN_GOES_HERE
 MONGO_DB=YOUR_MONGO_DB_URI_GOES_HERE
 ```
-Then simply run `npm install` then run `npm start` and your bot is ready! You can change status by changing `events/ready.js` code. Again, special thanks to GhostGennix, Manav Garg, FirezTheGreat, Reconlx, ghaku, Codelyon and others!
+Then simply run `npm install` then run `npm start` and your bot is ready! You can change status by changing `events/ready.js` code. To change the prefix, go to `config.json` and change `"prefix": "XDD",` to `"prefix": "YOUR-PREFIX",` and its done! Again, special thanks to GhostGennix, Manav Garg, FirezTheGreat, Reconlx, ghaku, Codelyon and others!
