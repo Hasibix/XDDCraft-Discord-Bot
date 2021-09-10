@@ -45,7 +45,7 @@ client.giveawaysManager = new GiveawaysManager(client, {
     updateCountdownEvery: 3000,
     default: {
         botsCanWin: false,
-        embedColor: "#FF0000",
+        embedColor: "#DD2E44",
         reaction: "🎉"
     }
 });
@@ -75,6 +75,7 @@ client.on("message", async (message) => {
  if (message.author.bot) return;
 
   const randomAmountOfXp = Math.floor(Math.random() * 29) + 1; // Min 1, Max 30
+  const levelchannel = message.guild.channels.cache.get("798973608931098654")
 
  const hasLeveledUp = await Levels.appendXp(message.author.id, message.guild.id, randomAmountOfXp);
 
@@ -82,7 +83,7 @@ client.on("message", async (message) => {
 
    const user = await Levels.fetch(message.author.id, message.guild.id);
 
-   message.channel.send(`${message.author}, congratulations! You have leveled up to **${user.level}**. :tada:`);
+   levelchannel.send(`GG <@${message.author.id}>, you just advanced to level ${user.level}!`);
 
  }
 

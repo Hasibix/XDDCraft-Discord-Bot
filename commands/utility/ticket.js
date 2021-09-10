@@ -33,17 +33,17 @@ module.exports = {
       if(message.author.bot) return;
       switch (reaction.emoji.name) {
         case "🔒":
-        if(message.author.bot) return;
+        if(user.bot) return;
           channel.updateOverwrite(message.author, { SEND_MESSAGES: false });
           break;
         case "⛔":
-        if(message.author.bot) return;
+        if(user.bot) return;
+          setTimeout(() => channel.delete(), 5000);
           let timeOut = await channel.send("Deleting this channel in 5 seconds!");
           await timeOut.edit("Deleting this channel in 4 seconds!");
           await timeOut.edit("Deleting this channel in 3 seconds!");
           await timeOut.edit("Deleting this channel in 2 seconds!");
           await timeOut.edit("Deleting this channel in 1 seconds!");
-          setTimeout(() => channel.delete(), 5000);
           break;
       }
     });
