@@ -26,22 +26,30 @@ const prefixNormal = config.prefix;
 const giveawayPrefix = config.prefixGiveaway;
 //economy shop items
 client.shop = {
-  "laptop": {
-    cost: 5000
+  "diamond": {
+    cost: 500
   },
-  "phone": {
-    cost: 3500
+  "emerald": {
+    cost: 350
   },
-  "pc": {
-    cost: 10000
+  "iron": {
+    cost: 50
+  },
+  "netherite": {
+    cost: 1200
+  },
+  "block-of-diamond": {
+    cost: 4500
+  },
+  "block-of-netherite": {
+    cost: 10800
   }
-
 };
 client.config = config;
 //giveaway config
 const { GiveawaysManager } = require('discord-giveaways');
 client.giveawaysManager = new GiveawaysManager(client, {
-    storage: "./database.json",
+    storage: "./storage/giveaway.json",
     updateCountdownEvery: 3000,
     default: {
         botsCanWin: false,
