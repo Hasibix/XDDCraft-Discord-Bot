@@ -88,3 +88,10 @@ client.on("message", async (message) => {
  }
 
 });
+
+client.secrets = {
+  api: process.env.GOOGLE_API,
+};
+
+client.queue = new Map();
+
