@@ -16,7 +16,7 @@ module.exports = {
         let reason = args.slice(1).join(" ");
 
         let muterole;
-        let dbmute = await db.fetch(`muterole_${message.guild.id}`);
+        let dbmute = await client.fetchMuteRole(message.guild.id);
         let muteerole = message.guild.roles.cache.find(r => r.name === "Muted")
 
         if (!message.guild.roles.cache.has(dbmute)) {
@@ -25,7 +25,7 @@ module.exports = {
             muterole = message.guild.roles.cache.get(dbmute)
         }
       
-        let rolefetched = db.fetch(`muteeid_${message.guild.id}_${mutee.id}`)
+        let rolefetched = client.fetchMuteId(message.guild.id, mutee.id)
         if (!rolefetched) return;
 
         if (!muterole) return message.channel.send(`[${client.config.error}] There is no mute role to remove!`)
@@ -45,24 +45,5 @@ module.exports = {
             
             message.channel.send(`[${client.config.success}] ${mutee.user.username} was successfully unmuted!`);
         
-
-        let channel = db.fetch(`modlog_${message.guild.id}`)
-        if (!channel) return;
-
-        let embedModLog = new MessageEmbed()
-            .setColor("GREEN")
-            .setThumbnail(mutee.user.displayAvatarURL({ dynamic: true }))
-            .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
-            .addField("**Moderation**", "unmute")
-            .addField("**Unmuted**", mutee.user.username)
-            .addField("**Moderator**", message.author.username)
-            .addField("**Date**", message.createdAt.toLocaleString())
-            .setFooter(message.member.displayName, message.author.displayAvatarURL())
-            .setTimestamp();
-
-        var sChannel = message.guild.channels.cache.get(channel)
-        if (!sChannel) return;
-        sChannel.send({ embeds: [embedModLog]})
-
     }
 }

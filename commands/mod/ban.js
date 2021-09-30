@@ -54,26 +54,5 @@ module.exports = {
     }
 
     //End
-      
-        let channel = db.fetch(`modlog_${message.guild.id}`)
-        if (!channel) return;
-
-
-          let modEmbed = new MessageEmbed()
-            .setColor("#ff0000")
-            .setThumbnail(Member.displayAvatarURL({ dynamic: true }))
-            .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
-            .addField("**Moderation**", "ban")
-            .addField("**Banned**", `${Member.username}`)
-            .addField("**ID**", `${Member.id}`)
-            .addField("**Moderator**", message.author.username)
-            .addField("**Reason**", `${reason}` || "**No Reason**")
-            .addField("**Date**", message.createdAt.toLocaleString())
-            .setFooter(message.guild.name, message.guild.iconURL())
-            .setTimestamp();
-
-        var sChannel = message.guild.channels.cache.get(channel)
-        if (!sChannel) return;
-        sChannel.send(embed)
   }
 };

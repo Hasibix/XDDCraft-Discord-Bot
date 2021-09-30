@@ -1,13 +1,18 @@
 const client = require("../index.js");
 const { MessageEmbed } = require("discord.js");
-const db = require('quick.db');
+const Schema = require("../models/captcha")
 const Discord = require("discord.js")
 
 client.on('guildMemberAdd', async (member) => {
 try {
-  const nonverifiedrole = db.get(`nonverifyrole_${member.guild.id}`);
-  member.roles.add(nonverifiedrole)
-  const memberrole = db.get(`memberrole_${member.guild.id}`);
+  Schema.findOne({ Guild: member.guild.id }, async(err, data) => {
+    if(!data) return;
+    const nonverifiedrole = data.Non_VerifyRole
+    member.roles.add(nonverifiedrole)
+     const memberrole = data.Roles2
+    
+ 
+ 
   const toggle = db.get(`mentionmemberforcaptcha_${member.guild.id}`)
       if(toggle === null) { toggle === false }
 	    let captchaLogsID = db.get(`modlog_${member.guild.id}`);
@@ -22,7 +27,7 @@ try {
     content: `[${client.config.warning}] You have 60 sec to solve this captcha! ${member.user.toString()}`,
 		files: [buffer]
 	})
-	let pog = db.get(`verifyRole_${member.guild.id}`);
+	let pog = data.Roles
 
 	let filter = m => m.author.id === member.user.id;
 
@@ -92,10 +97,13 @@ try {
 	    member.kick();
 		}
 	});
-} catch (error) {
+   })
+   } catch (error) {
   console.log(`${member.user.tag} Joined ${member.guild.name} server! But sadly i could not send that user captcha ;-;`)
   return;
 }
+
+  
 });
 
 client.on('guildMemberAdd', async member => {
@@ -105,7 +113,7 @@ client.on('guildMemberAdd', async member => {
        
        const welembed = new MessageEmbed()
        .setTitle(`**Welcome to ${member.guild.name} !!!**`)
-       .setDescription(`Hello **${member.displayName}** welcome to **${member.guild.name}**! Enjoy your stay **${member.displayName}**!!!! Now we have: ${member.guild.memberCount} Members!`)
+       .setDescription(`Hello **${member.displayName}** welcome to **${member.guild.name}**! Enjoy your stay **${member.displayName}**!!!! The user was invited by idk! Now we have: ${member.guild.memberCount} Members!`)
        .setColor("GREEN")
        .setAuthor("Welcome", client.user.displayAvatarURL({
           dynamic: true

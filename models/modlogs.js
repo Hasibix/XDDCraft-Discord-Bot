@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+
 const Schema = new mongoose.Schema({
-    id: String,
-    coins: Number
+    Guild: String,
+    Channel: String,
 });
 
 module.exports = mongoose.model(
-  'Bank', Schema
+  'modlogs', Schema
 )

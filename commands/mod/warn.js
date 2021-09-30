@@ -1,5 +1,5 @@
 const db = require('../../models/warns')
-const daba = require("quick.db")
+const daba = require("../../models/modlogs")
 const { Message, MessageEmbed } = require('discord.js')
 
 module.exports = {
@@ -35,12 +35,18 @@ module.exports = {
             }
             data.save()
         });
-        user.send(`**You were warned in ${message.guild.name} for:** ${reason}`)
+        user.send(`**You were warned in ${message.guild.name} for:** ${reason}`).catch((err) => {
+          console.log(`I could not send a user's warn dm message! ;-; \n{\n   DisplayName: ${user.displayName}\n   Discriminator: ${user.discriminator}\n   ID: ${user.id}\n   Reason: ${reason}\n   Moderator: ${message.author.tag}\n}`)
+        })
         message.channel.send(`[${client.config.success}] ${user.user.tag} has been warned successfully! Reason: ${reason}`)
+        
 
 
-            let channel = daba.fetch(`modlog_${message.guild.id}`)
-            if (!channel) return;
+            daba.findOne({ Guild: message.guild.id }, async(err, data) => {
+              if(!data) return;
+              let channel = message.guild.channels.cache.get(data.Channel)
+              
+              if (!channel) return;
 
             let embedModLog = new MessageEmbed()
                 .setColor('RED')
@@ -54,8 +60,8 @@ module.exports = {
                 .setFooter(message.member.displayName, message.author.displayAvatarURL())
                 .setTimestamp()
 
-            var sChannel = message.guild.channels.cache.get(channel)
-            if (!sChannel) return;
-            sChannel.send({ embeds: [embedModLog]})
+
+            channel.send({ embeds: [embedModLog]})
+            })
     }
 }

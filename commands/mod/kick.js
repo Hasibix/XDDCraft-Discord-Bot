@@ -21,25 +21,5 @@ module.exports = {
   message.channel.send(`[${client.config.success}] **${Member.user.tag}** has been kicked! Reason: ${reason}`);
   }
   
-        let channel = db.fetch(`modlog_${message.guild.id}`)
-        if (!channel) return;
-
-
-          let embedModLog = new MessageEmbed()
-            .setColor("#ff0000")
-            .setThumbnail(Member.user.displayAvatarURL({ dynamic: true }))
-            .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
-            .addField("**Moderation**", "kick")
-            .addField("**Kicked**", `${Member.user.username}`)
-            .addField("**ID**", `${Member.user.id}`)
-            .addField("**Moderator**", message.author.username)
-            .addField("**Reason**", `${reason}` || "**No Reason**")
-            .addField("**Date**", message.createdAt.toLocaleString())
-            .setFooter(message.guild.name, message.guild.iconURL())
-            .setTimestamp();
-
-        var sChannel = message.guild.channels.cache.get(channel)
-        if (!sChannel) return;
-        sChannel.send({embeds: [embedModLog]})
    }
 }

@@ -1,21 +1,9 @@
-const http = require('http');
-
-const requestListener = function (req, res) {
-  res.writeHead(200);
-  res.end('XDDCraft Discord Bot is ready!');
-
-}
-
-const server = http.createServer(requestListener);
-server.listen(8080);
-
 const { Client, Collection } = require("discord.js");
 require("dotenv").config();
 
 const client = new Client({
     intents: 32767,
 });
-module.exports = client;
 
 // Global Variables
 client.commands = new Collection();
@@ -24,10 +12,19 @@ client.config = require("./config.json");
 
 // Initializing the project
 require("./handler")(client);
-
-
+module.exports = client;
 client.login(process.env.BOT_TOKEN);
 
+//embed colors!
+client.levelColor = "#226699";
+client.economyColor = "#A7D28B";
+client.funColor = "#FFCC4D";
+client.infoColor = "#7289DA";
+client.giveawayColor = "#DD2E44";
+client.modColor = "#5865F2";
+client.musicColor = "#5DADEC";
+client.utilityColor = "#FFCB63";
+client.rrColor = "#FF63B1";
 
 //Giveaway
 const { GiveawaysManager } = require('discord-giveaways');
@@ -46,7 +43,6 @@ client.giveawaysManager = new GiveawaysManager(client, {
         }
     }
 });
-// We now have a client.giveawaysManager property to manage our giveaways!
 
 client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
     console.log(`${member.user.tag} entered giveaway #${giveaway.messageId} (${reaction.emoji.name})`);
@@ -60,62 +56,69 @@ client.giveawaysManager.on("giveawayEnded", (giveaway, winners) => {
     console.log(`Giveaway #${giveaway.messageId} ended! Winners: ${winners.map((member) => member.user.username).join(', ')}`);
 });
 
-//Leveling
+//ReactionRoles
+const react = require("mongodb-reaction-role");
+client.react = new Map(); 
+client.fetchforguild = new Map();
+react.setURL(process.env.MONGO_DB).then(() => {
+  console.log("Reaction role is successfully connected with mongodb!")
+});
 
 //Economy
 const ecoSchema = require('./models/economy.js');
-client.ecobal = (id) => new Promise(async ful => {
-  const data = await ecoSchema.findOne({ id });
+client.ecobal = (User) => new Promise(async ful => {
+  const data = await ecoSchema.findOne({ User });
   if(!data) return ful(0);
-  ful(data.coins)
+  if(!data.Wallet || data.Wallet === null) return ful(0)
+  ful(data.Wallet)
 })
-client.addmoney = (id, coins) => {
-  ecoSchema.findOne({id}, async(err, data) => {
+client.addmoney = (User, Money) => {
+  ecoSchema.findOne({User}, async(err, data) => {
     if (err) throw err;
     if(data) {
-      data.coins += coins;
+      data.Wallet += Money;
     } else {
-      data = new ecoSchema({ id, coins })
+      data = new ecoSchema({ User: User, Wallet: Money })
     }
     data.save();
   })
 }
-client.rmvmoney = (id, coins) => {
-  ecoSchema.findOne({id}, async(err, data) => {
+client.rmvmoney = (User, Money) => {
+  ecoSchema.findOne({User}, async(err, data) => {
     if (err) throw err;
     if(data) {
-      data.coins -= coins;
+      data.Wallet -= Money;
     } else {
-      data = new ecoSchema({ id, coins: -coins })
+      data = new ecoSchema({ User: User, Wallet: -Money })
     }
     data.save();
   })
 }
-//bank
-const bankSchema = require('./models/bank.js');
-client.bankBal = (id) => new Promise(async ful => {
-  const data = await bankSchema.findOne({ id });
+client.bankBal = (User) => new Promise(async ful => {
+  const data = await ecoSchema.findOne({ User });
   if(!data) return ful(0);
-  ful(data.coins)
+  if(!data.Bank) return ful(0);
+  ful(data.Bank)
 })
-client.bankDeposit = (id, coins) => {
-  bankSchema.findOne({id}, async(err, data) => {
+client.bankDeposit = (User, Money) => {
+  ecoSchema.findOne({User}, async(err, data) => {
     if (err) throw err;
     if(data) {
-      data.coins += coins;
+      data.Bank += Money;
     } else {
-      data = new bankSchema({ id, coins })
+      data = new ecoSchema({ User: User, Bank: Money })
     }
     data.save();
   })
 }
-client.bankWithdraw = (id, coins) => {
-  bankSchema.findOne({id}, async(err, data) => {
+
+client.bankWithdraw = (User, Money) => {
+  ecoSchema.findOne({User}, async(err, data) => {
     if (err) throw err;
     if(data) {
-      data.coins -= coins;
+      data.Bank -= Money;
     } else {
-      data = new bankSchema({ id, coins: -coins })
+      data = new ecoSchema({ User: User, Bank: -Money })
     }
     data.save();
   })
@@ -136,14 +139,12 @@ client.captcha = function() {
 	const particles = Math.floor(Math.random() * 101);
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	const charactersLength = characters.length;
-	// Random code generation
 	for (var i = 0; i < 5; i++) {
 		string += characters.charAt(Math.floor(Math.random() * charactersLength));
 	}
 	ctx.font = 'bold 100px Roboto';
 	ctx.lineWidth = 7.5;
 	let textPos = 45;
-	// Captcha text
 	for (var i = 0; i < string.length; i++) {
 		const char = string.charAt(i);
 		const color = colors[Math.floor(Math.random() * colors.length)];
@@ -151,7 +152,6 @@ client.captcha = function() {
 		ctx.fillText(char, textPos, 120);
 		textPos += 65;
 	}
-	// Paticles
 	for (var i = 0; i < particles; i++) {
 		const pos = {
 			width: Math.floor(Math.random() * canvas.width),
@@ -164,14 +164,12 @@ client.captcha = function() {
 		ctx.closePath();
 		ctx.fill();
 	}
-	// Get the cords
 	let x = 0;
 	for (var i = 0; i < num + 1; i++) {
 		const l = Math.floor(Math.random() * canvas.height);
 		if (i != 0) x += canvas.width / num;
 		cords.push([x, l]);
 	}
-	// Strokes
 	for (var i = 0; i < cords.length; i++) {
 		const cord = cords[i];
 		const nextCord = cords[i + 1];
@@ -184,3 +182,82 @@ client.captcha = function() {
 	}
 	return { buffer: canvas.toBuffer(), text: string };
 };
+
+//http server (adding socket.io sooner :D) 
+setTimeout(() => {
+  const http = require('http');
+
+const requestListener = function (req, res) {
+  res.writeHead(200);
+  res.end('Bot is ready!');
+
+}
+
+const server = http.createServer(requestListener);
+server.listen(8080);
+console.log("http server ready")
+}, 5000)
+
+//level
+
+
+const levelSchema = require('./models/levels.js');
+client.checkXP = (User) => new Promise(async ful => {
+  const data = await levelSchema.findOne({ User });
+  if(!data) return ful(0);
+  if(!data.XP || data.XP === null) return ful(0)
+  ful(data.XP)
+})
+client.addXP = (User, Amount) => {
+  levelSchema.findOne({User}, async(err, data) => {
+    if (err) throw err;
+    if(data) {
+      data.XP += Amount;
+    } else {
+      data = new levelSchema({ User: User, XP: Amount })
+    }
+    data.save();
+  })
+}
+client.removeXP = (User, Amount) => {
+  levelSchema.findOne({User}, async(err, data) => {
+    if (err) throw err;
+    if(data) {
+      data.XP -= Amount;
+    } else {
+      data = new levelSchema({ User: User, XP: -Amount })
+    }
+    data.save();
+  })
+}
+client.checkLevel = (User) => new Promise(async ful => {
+  const data = await levelSchema.findOne({ User });
+  if(!data) return ful(0);
+  if(!data.Level) return ful(0);
+  ful(data.Level)
+})
+client.addLevel = (User, Amount) => {
+  levelSchema.findOne({User}, async(err, data) => {
+    if (err) throw err;
+    if(data) {
+      data.Level += Amount;
+    } else {
+      data = new levelSchema({ User: User, Level: Amount })
+    }
+    data.save();
+  })
+}
+
+client.removeLevel = (User, Amount) => {
+  levelSchema.findOne({User}, async(err, data) => {
+    if (err) throw err;
+    if(data) {
+      data.Level -= Amount;
+    } else {
+      data = new levelSchema({ User: User, Level: -Amount })
+    }
+    data.save();
+  })
+}
+//mod
+   

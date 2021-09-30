@@ -1,4 +1,4 @@
-//Added By KresStew#6666
+//Added By Hasibix#0001
 
 const { MessageEmbed } = require("discord.js");
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
              if(choiceType !== choice) {
           let embed = new MessageEmbed()
         .setTitle("Coinflip!")
-        .setThumbnail("https://media.discordapp.net/attachments/887375212763553802/887596715178336256/coinheads.png?width=406&height=406")
+        .setThumbnail(`https://media.discordapp.net/attachments/887375212763553802/887596715178336256/coin${choice}.png?width=406&height=406`)
         .setDescription(`You flipped **${choice}** and lose **${moneyArg}** ;-;`)
         message.channel.send({embeds: [embed]})
         client.rmvmoney(member.id, parseInt(moneyArg))

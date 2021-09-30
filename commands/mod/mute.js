@@ -10,7 +10,7 @@ module.exports = {
           const duration = args[1];
           const second = duration * 1000;
 
-            if (!message.guild.me.permissions.has("MANAGE_GUILD")) return message.channel.send(`[${client.config.error}] I don't have permissions to mute someone ;-; [MANAGE_GUILD]`)
+            if (!message.guild.me.permissions.has("MANAGE_ROLES")) return message.channel.send(`[${client.config.error}] I don't have permissions to mute someone ;-; [MANAGE_ROLES]`)
             if (!args[0]) return message.channel.send(`[${client.config.error}] Please enter a user to be muted!`);
           
             var mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args[0].toLocaleLowerCase()) || message.guild.members.cache.find(ro => ro.displayName.toLowerCase() === args[0].toLocaleLowerCase());
@@ -38,15 +38,13 @@ module.exports = {
 
             if (!muterole) {
                 try {
-                    muterole = await message.guild.roles.create({
-                        data: {
+                    muterole = await message.guild.roles.create({  
                             name: "Muted",
                             color: "#808080",
-                            permissions: []
-                        }
+                            permissions: [],
                     })
                     message.guild.channels.cache.forEach(async (channel) => {
-                        await channel.createOverwrite(muterole, {
+                        await channel.permissionOverwrites.create(muterole, {
                             SEND_MESSAGES: false,
                             ADD_REACTIONS: false,
                             SPEAK: false,
@@ -90,25 +88,6 @@ module.exports = {
             mutee.roles.add(roleadds2)                            
           }
                }, second);
-            let channel = db.fetch(`modlog_${message.guild.id}`)
-            if (!channel) return;
-
-            let embedModLog = new MessageEmbed()
-                .setColor('RED')
-                .setThumbnail(mutee.user.displayAvatarURL({ dynamic: true }))
-                .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
-                .addField("**Moderation**", "mute")
-                .addField("**Muted**", mutee.user.username)
-                .addField("**Moderator**", message.author.username)
-                .addField("**Duration**", `${duration + " Seconds" || "**No duration, until he unmutes!**"}`)
-                .addField("**Reason**", `${reason || "**No Reason**"}`)
-                .addField("**Date**", message.createdAt.toLocaleString())
-                .setFooter(message.member.displayName, message.author.displayAvatarURL())
-                .setTimestamp()
-
-            var sChannel = message.guild.channels.cache.get(channel)
-            if (!sChannel) return;
-            sChannel.send({ embeds: [embedModLog]})
         } catch {
             return;
         }

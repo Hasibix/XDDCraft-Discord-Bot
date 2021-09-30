@@ -1,4 +1,4 @@
-// Added By Hasibix#0001 & void#9822
+// Added By Hasibix#0001
 
 const { pagination } = require('reconlx')
 const { Message, Client, MessageEmbed, MessageButton} = require('discord.js')
@@ -6,59 +6,73 @@ const { Message, Client, MessageEmbed, MessageButton} = require('discord.js')
 module.exports = {
     name : 'help',
     description : 'bruh',
+    category: "info",
 
     /**
      * @param {Client} client
      * @param {Message} message
      * @param {String[]} args
-     */
+     */ 
 
     run : async(client, message, args) => {
         
 const Color="GREEN";
 const Prefix="XDD";
 let embed1 = new MessageEmbed()
-.setColor("#A7D28B")
+.setColor(client.economyColor)
 .setTitle(`${client.user.username} Commands!`)
 .setDescription(`**Use arrows to change pages!**`+
 "\n\n**ECONOMY**\n```Addmoney,\nBal,\nBeg,\nBuy,\nDaily,\nInventory,\nRich,\nSearch,\nSetmoney,\nShop,\nTransfer,\nWeekly,\nWork```")
 .setTimestamp();
 let embed2 = new MessageEmbed()
-.setColor("#FFCC4D")
+.setColor(client.funColor)
 .setTitle(`${client.user.username} Commands!`)
 .setDescription(`**Use arrows to change pages!**`+
-"\n\n**FUN**\n```Avatar,\nCalculate,\nCoinflip,\nEmojify,\nHack,\nHangman,\nMeme,\nReverse,\nRps,\nTictactoe```")
+"\n\n**FUN**\n```Avatar,\nCoinflip,\nEmojify,\nHack,\nHangman,\nMeme,\nReverse,\nRps,\nTictactoe,\nDog,\nImage,\nSnake```")
 .setTimestamp();
 let embed3 = new MessageEmbed()
-.setColor("#DD2E44")
+.setColor(client.giveawayColor)
 .setTitle(`${client.user.username} Commands!`)
 .setDescription(`**Use arrows to change pages!**`+
 "\n\n**GIVEAWAY**\n```End,\nReroll,\nStart```")
 .setTimestamp();
 let embed4 = new MessageEmbed()
-.setColor("#7289DA")
+.setColor(client.infoColor)
 .setTitle(`${client.user.username} Commands!`)
 .setDescription(`**Use arrows to change pages!**`+
-"\n\n**INFO**\n```Help,\nLeaderboard,\nPing,\nVersion```")
+"\n\n**INFO**\n```Help,\nLeaderboard,\nPing,\nVersion,\nWhois```")
 .setTimestamp();
 let embed5 = new MessageEmbed()
-.setColor("#226699")
+.setColor(client.levelColor)
 .setTitle(`${client.user.username} Commands!`)
 .setDescription(`**Use arrows to change pages!**`+
-"\n\n**LEVELS**\n```Level,\nAddxp,\nRemovexp```")
+"\n\n**LEVELS**\n```Level,\nAddxp,\nRemovexp,\nAddlevel,\nRemovelevel```")
 .setTimestamp();
 let embed6 = new MessageEmbed()
-.setColor("#5865F2")
+.setColor(client.modColor)
 .setTitle(`${client.user.username} Commands!`)
 .setDescription(`**Use arrows to change pages!**`+
 "\n\n**MOD**\n```Ban,\nUnban,\nKick,\nMute,\nUnmute,\nWarn,\nUnwarn```")
 .setTimestamp();
 let  embed7 = new MessageEmbed()
-.setColor("#5DADEC")
+.setColor(client.musicColor)
 .setTitle(`${client.user.username} Commands!`)
 .setDescription(`**Use arrows to change pages!**`+
 "\n\n**MUSIC**\n```Bassboost,\nClear,\nConfig,\nDisconnect,\nGrab,\nLoop,\nLoopqueue,\nLyrics,\nNowplaying,\nPause,\nPlay,\nQueue,\nRemove,\nResume,\nSearch,\nSeek,\nShuffle,\nSkip,\nSkipto,\nStats-music,\nVolume,\nYoutube```")
 .setTimestamp();
+let  embed8 = new MessageEmbed()
+.setColor(client.rrColor)
+.setTitle(`${client.user.username} Commands!`)
+.setDescription(`**Use arrows to change pages!**`+
+"\n\n**REACTION-ROLES**\n```Add,\nRemove,\nEdit```")
+.setTimestamp();
+let  embed9 = new MessageEmbed()
+.setColor(client.utilityColor)
+.setTitle(`${client.user.username} Commands!`)
+.setDescription(`**Use arrows to change pages!**`+
+"\n\n**UTILITY**\n```Addrole,\nCalculate,\nCalculator\nConfig,\nPrivateMessage,\nPurge,\nRemoveRole,\nSay,\nTicket```")
+.setTimestamp();
+
 
     let pages = [
       embed1,
@@ -67,7 +81,9 @@ let  embed7 = new MessageEmbed()
       embed4,
       embed5,
       embed6,
-      embed7
+      embed7,
+      embed8,
+      embed9
     ]
       let timeout = 60000
      pagination({
@@ -90,6 +106,6 @@ let  embed7 = new MessageEmbed()
       fastSkip: true,
     });
     // const emoji = ["⬅️", "➡️"]
-  
+    
     }
 }

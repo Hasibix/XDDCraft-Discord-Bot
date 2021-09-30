@@ -3,6 +3,7 @@ const ms = require("ms")
 const db = require("quick.db")
 const { Collection, Message, MessageEmbed } = require("discord.js");
 const cooldown = require('../models/cooldown.js')
+const logschannelschema = require("../models/modlogs")
 
 client.on("messageCreate", async (message) => {
     if (
@@ -25,7 +26,88 @@ client.on("messageCreate", async (message) => {
              return;
         } else {
           async function commandExecute(){
-    if(command)  await command.run(client, message, args)
+    if(command) {
+      if(command.logs === true) {
+        const mama = await logschannelschema.findOne({ Guild: message.guild.id })
+        if(!mama) return;
+        const channel = message.guild.channels.cache.get(mama.Channel)
+        if(command.category) {
+         if(command.reason && command.interactedUser && command.whatItDid) {
+            let embedLogs = new MessageEmbed()
+                .setColor('RED')
+                .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
+                .addField("**"+command.category[0].toUpperCase()+command.category.slice(1).toLowerCase()+"**", command.name)
+                .addField("**Command Executer**", message.author.username)
+                .addField("**Reason**", command.reason)
+                .addField("**"+command.whatItDid+"**", command.interactedUser)
+                .addField("**Date**", message.createdAt.toLocaleString())
+                .setFooter(message.member.displayName, message.author.displayAvatarURL())
+                .setTimestamp()
+         channel.send({ embeds: [embedLogs] })
+         } else if(command.reason && !command.interactedUser && !command.whatItDid) {
+            let embedLogs = new MessageEmbed()
+                .setColor('RED')
+                .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
+                .addField("**"+command.category[0].toUpperCase()+command.category.slice(1).toLowerCase()+"**", command.name)
+                .addField("**Command Executer**", message.author.username)
+                .addField("**Reason**", command.reason)
+                .addField("**Date**", message.createdAt.toLocaleString())
+                .setFooter(message.member.displayName, message.author.displayAvatarURL())
+                .setTimestamp()
+         channel.send({ embeds: [embedLogs] })
+         } else if (!command.reason && !command.interactedUser && !command.whatItDid) {
+           let embedLogs = new MessageEmbed()
+                .setColor('RED')
+                .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
+                .addField("**"+command.category[0].toUpperCase()+command.category.slice(1).toLowerCase()+"**", command.name)
+                .addField("**Command Executer**", message.author.username)
+                .addField("**Date**", message.createdAt.toLocaleString())
+                .setFooter(message.member.displayName, message.author.displayAvatarURL())
+                .setTimestamp()
+         channel.send({ embeds: [embedLogs] })
+         }
+        } else {
+         if(command.reason && command.interactedUser && command.whatItDid) {
+            let embedLogs = new MessageEmbed()
+                .setColor('RED')
+                .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
+                .addField("**Command**", command.name)
+                .addField("**Command Executer**", message.author.username)
+                .addField("**Reason**", command.reason)
+                .addField("**"+command.whatItDid+"**", command.interactedUser)
+                .addField("**Date**", message.createdAt.toLocaleString())
+                .setFooter(message.member.displayName, message.author.displayAvatarURL())
+                .setTimestamp()
+         channel.send({ embeds: [embedLogs] })
+         } else if(command.reason && !command.interactedUser && !command.whatItDid) {
+            let embedLogs = new MessageEmbed()
+                .setColor('RED')
+                .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
+                .addField("**Command**", command.name)
+                .addField("**Command Executer**", message.author.username)
+                .addField("**Reason**", command.reason)
+                .addField("**Date**", message.createdAt.toLocaleString())
+                .setFooter(message.member.displayName, message.author.displayAvatarURL())
+                .setTimestamp()
+         channel.send({ embeds: [embedLogs] })
+         } else if (!command.reason && !command.interactedUser && !command.whatItDid) {
+           let embedLogs = new MessageEmbed()
+                .setColor('RED')
+                .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
+                .addField("**Command**", command.name)
+                .addField("**Command Executer**", message.author.username)
+                .addField("**Date**", message.createdAt.toLocaleString())
+                .setFooter(message.member.displayName, message.author.displayAvatarURL())
+                .setTimestamp()
+         channel.send({ embeds: [embedLogs] })
+         }
+        }
+        await command.run(client, message, args)
+
+      } else {
+        await command.run(client, message, args)
+      }
+    }
 }
 if(command.cooldown) {
     const current_time = Date.now();
