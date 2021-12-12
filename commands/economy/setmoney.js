@@ -23,7 +23,7 @@ module.exports = {
         .setTitle(`Money Updated!`)
         .addField(`User`, `<@${data.user}>`)
         .addField(`Total Amount`, data.after)
-        .setColor("RANDOM")
+        .setColor("#A7D28B")
         .setThumbnail(user.displayAvatarURL)
         .setTimestamp();
     return message.channel.send(embed);

@@ -5,7 +5,7 @@ const Discord = require("../index.js");
 client.on('ready', () => {
 
         client.user.setPresence({
-          status: "streaming",
+          status: "online",
           activity: {
           name: "XDDhelp | play.xddcraft.net",
           type: "STREAMING",

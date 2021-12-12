@@ -15,7 +15,7 @@ module.exports = {
     run : async(client, message, args) => {
   const embed = new MessageEmbed()
     .setAuthor(`Inventory of ${message.author.tag}`, message.guild.iconURL)
-    .setColor("RANDOM")
+    .setColor("#A7D28B")
     .setThumbnail()
     .setTimestamp();
   const x = client.db.get(`items_${message.author.id}`);

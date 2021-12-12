@@ -23,7 +23,7 @@ module.exports = {
         .addField(`User`, `<@${data.user}>`)
         .addField(`Balance Given`, `${data.amount} 💸`)
         .addField(`Total Amount`, data.after)
-        .setColor("YELLOW")
+        .setColor("#A7D28B")
         .setThumbnail(user.displayAvatarURL)
         .setTimestamp();
     return message.channel.send(embed);

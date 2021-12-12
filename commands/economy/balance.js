@@ -18,7 +18,7 @@ module.exports = {
     const embed = new MessageEmbed()
         .setTitle(`${user.username}'s Balance`)
         .setDescription(`**Wallet**: ${userBalance.amount} :dollar:\n**Bank**: Not Done!`)
-        .setColor("YELLOW")
+        .setColor("#A7D28B")
         .setThumbnail(user.displayAvatarURL)
         .setTimestamp();
     return message.channel.send(embed);

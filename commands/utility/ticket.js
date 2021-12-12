@@ -3,7 +3,7 @@ module.exports = {
   aliases: [],
   description: "open a ticket!",
   run : async(client, message, args) => {
-    const channel = await message.guild.channels.create(`ticket: ${message.author.tag}`);
+    const channel = await message.guild.channels.create(`ticket ${1/1000}`);
     
     channel.updateOverwrite(message.guild.id, {
       SEND_MESSAGE: false,
