@@ -5,19 +5,24 @@ const math = require("mathjs");
 module.exports = {
     name : 'calculator',
     aliases : [],
-    description : 'calculates your math :)',
-
+    description : 'opens a calculator :)',
+   
     /**
      * @param {Client} client
      * @param {Message} message
      * @param {String[]} args
      */
+      usages: "<color>",
 
     run : async(client, message, args) => {
-    
-      let color = colors.find((val) => (val.name.toLowerCase()) === args[0]).value;
+      let color;
+      if(args[0]) {
+        color = colors.find((val) => (val.name.toLowerCase()) === args[0]).value;
+      } else {
+        color = colors.find((val) => (val.name.toLowerCase()) === "grey").value;
+      }
       
-      if(!args[0]) { let color = "GREY" }
+
      await Calculator({
     message: message,
     embed: {

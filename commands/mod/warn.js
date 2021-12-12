@@ -1,67 +1,28 @@
-const db = require('../../models/warns')
-const daba = require("../../models/modlogs")
+const warnSchema = require('../../models/warns')
 const { Message, MessageEmbed } = require('discord.js')
 
 module.exports = {
-    name :'warn',
+    name : 'warn',
     /**
      * @param {Message} message
-     */
+      */
     permissions: ["ADMINISTRATOR"],
+            usage: "<mention member> <reason>",
     run : async(client, message, args) => {
+       let user = message.mentions.users.first()
+       let reason = args.slice(1).join(" ")
 
-        const user = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-        if(!user) return message.channel.send(`[${client.config.error}] Please mention a user to warn!`)
-        const reason = args.slice(1).join(" ")
-        db.findOne({ guildid: message.guild.id, user: user.user.id}, async(err, data) => {
-            if(err) throw err;
-            if(!data) {
-                data = new db({
-                    guildid: message.guild.id,
-                    user : user.user.id,
-                    content : [
-                        {
-                            moderator : message.author.id,
-                            reason : reason
-                        }
-                    ]
-                })
-            } else {
-                const obj = {
-                    moderator: message.author.id,
-                    reason : reason
-                }
-                data.content.push(obj)
-            }
-            data.save()
-        });
-        user.send(`**You were warned in ${message.guild.name} for:** ${reason}`).catch((err) => {
-          console.log(`I could not send a user's warn dm message! ;-; \n{\n   DisplayName: ${user.displayName}\n   Discriminator: ${user.discriminator}\n   ID: ${user.id}\n   Reason: ${reason}\n   Moderator: ${message.author.tag}\n}`)
-        })
-        message.channel.send(`[${client.config.success}] ${user.user.tag} has been warned successfully! Reason: ${reason}`)
-        
+       if(!user || !reason) return message.channel.send(`[${client.emoji.error}] Invalid args! [XDDwarn <mention member> <reason>]`)
 
-
-            daba.findOne({ Guild: message.guild.id }, async(err, data) => {
-              if(!data) return;
-              let channel = message.guild.channels.cache.get(data.Channel)
-              
-              if (!channel) return;
-
-            let embedModLog = new MessageEmbed()
-                .setColor('RED')
-                .setThumbnail(user.user.displayAvatarURL({ dynamic: true }))
-                .setAuthor(`${message.guild.name} Logs`, message.guild.iconURL())
-                .addField("**Moderation**", "warn")
-                .addField("**Warned**", user.user.username)
-                .addField("**Moderator**", message.author.username)
-                .addField("**Reason**", `${reason}`)
-                .addField("**Date**", message.createdAt.toLocaleString())
-                .setFooter(message.member.displayName, message.author.displayAvatarURL())
-                .setTimestamp()
-
-
-            channel.send({ embeds: [embedModLog]})
-            })
+       new warnSchema({
+         User: user.id,
+         Guild: message.guild.id,
+         Moderator: message.author.id,
+         Reason: reason,
+         Timestamp: Date.now()
+       }).save()
+      
+       user.send(`**You have been wanred in ${message.guild.name} for ${reason}!**`).catch(err => console.log(err))
+       message.channel.send(`[${client.emoji.success}] ${user.tag} has been warned! reason: ${reason}`)
     }
 }

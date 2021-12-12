@@ -1,35 +1,41 @@
-const db = require('../../models/warns')
+const warnSchema = require('../../models/warns')
 const { Message, MessageEmbed } = require('discord.js')
+const moment = require("moment")
 
 module.exports = {
     name :'warns',
+    aliases: ['warnings'],
     /**
      * @param {Message} message
      */
+    usage: "<mention member>",
     permissions: ["ADMINISTRATOR"],
     run : async(client, message, args) => {
 
-        const user = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-        if(!user) return message.channel.send(`[${client.config.error}] Please mention a user to see warnings!`)
-        const reason = args.slice(1).join(" ")
-        db.findOne({ guildid: message.guild.id, user: user.user.id}, async(err, data) => {
-            if(err) throw err;
-            if(data) {
-                message.channel.send(new MessageEmbed()
-                    .setTitle(`${user.user.tag}'s warns`)
-                    .setDescription(
-                        data.content.map(
-                            (w, i) => 
-                            `\`${i + 1}\` | Moderator : ${message.guild.members.cache.get(w.moderator).user.tag}\nReason : ${w.reason}`
-                        )
-                    )
-                    .setColor("BLUE")
-                )
-            } else {
-                message.channel.send(`[${client.config.error}] The mentioned user have no warnings!`)
-            }
-
-        })
-        
+        const user = message.mentions.members.first()
+        if(!user) return message.channel.send(`[${client.emoji.error}] Please mention a user to see warnings!`)
+      const userWarns = await warnSchema.find({ Guild: message.guild.id, User: user.id })
+      if(!userWarns?.lengh) {
+        return message.channel.send(
+         `[${client.emoji.error}] **${user.user.tag}** has no warnings in this server.`
+        )
+      }
+      const embedDesc = userWarns.map((warn, i) => {
+        const moderator = message.guild.members.cache.get(warn.Moderator).user;
+        return [
+          `${i + 1} | **WarnID**: ${warn._id}`,
+          `**Moderator**: ${moderator.tag || "Has left the server"}`,
+          `**Date**: ${moment(warn.Timestamp).format("MMMM Do YYYY")}`,
+          `**Reason**: ${warn.Reason}`,
+        ].join("\n\n")
+      })
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+        .setTitle(`${user.tag}'s warnings`)
+        .setDescription(embedDesc.toString())
+        .setColor(client.modColor)
+      ]
+    })
     }
 }

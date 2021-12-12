@@ -4,7 +4,7 @@ const { Client } = require("discord.js");
 require("dotenv").config();
 const mongooseConnectionString = process.env.MONGO_DB;
 const mongoose = require("mongoose");
-
+const colors = require("colors")
 const globPromise = promisify(glob);
 
 /**
@@ -36,59 +36,23 @@ module.exports = async (client) => {
     const arrayOfSlashCommands = [];
     slashCommands.map((value) => {
         const file = require(value);
+
+      
         if (!file?.name) return;
         client.slashCommands.set(file.name, file);
 
         if (["MESSAGE", "USER"].includes(file.type)) delete file.description;
+        if(file.permissions) file.defaultPermissions = false;
         arrayOfSlashCommands.push(file);
     });
-    client.on("ready", async () => {
-        // Register for a single guild
-        const guild = client.guilds.cache.get("856761453263192084");
-        await guild.commands.set(arrayOfSlashCommands).then((cmd) => {
-          const getRoles = (commandNames) => {
-            const permissions = arrayOfSlashCommands.find(x => x.name === commandNames
-            ).userPermissions;
-            if(!permissions) return null;
-            return guild.roles.cache.filter(x => x.permissions.has(permissions) && !x.managed
-            );
-          };
-          const fullPermissions = cmd.reduce((accumulator, x) => {
-            const roles = getRoles(x.name);
-            if(!roles) return accumulator;
 
-            const permissions = roles.reduce((a, v) => {
-              return [
-                ...a,
-                {
-                  id: v.id,
-                  type: "ROLE",
-                  permission: true,
-                },
-              ];
-            }, [])
-              
-              return [
-                ...accumulator,
-                {
-                  id: x.id,
-                  permissions,
-                }
-              ]
-          }, []) 
-
-          guild.commands.permissions.set({ fullPermissions })
-        });
-            
-
-
-        // Register for all the guilds the bot is in
-        // await client.application.commands.set(arrayOfSlashCommands);
-    });
-
+     client.on("ready", async() => {
+       
+        await client.application.commands.set(arrayOfSlashCommands);
+     })
     // mongoose
     const mongooseConnectionString = process.env.MONGO_DB;
     if (!mongooseConnectionString) return;
 
-    mongoose.connect(mongooseConnectionString).then(() => console.log('Connected to mongodb'));
+    mongoose.connect(mongooseConnectionString).then(() => client.logger.log(`Mongoose: Connected to mongodb`));
 };

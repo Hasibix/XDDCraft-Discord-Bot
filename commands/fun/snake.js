@@ -1,10 +1,9 @@
-//Added By Hasibix#0001
-
 const { MessageEmbed } = require("discord.js");
 const { Snake } = require("weky")
 module.exports = {
     name: "snake",
     description: "the snake game",
+    
     run: async(client, message, args) => {
       await Snake({
 	message: message,

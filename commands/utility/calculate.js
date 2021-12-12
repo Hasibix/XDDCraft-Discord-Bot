@@ -12,7 +12,7 @@ module.exports = {
      * @param {Message} message
      * @param {String[]} args
      */
-
+      usages: "<number> <type [+|-|x|*|/]>",
     run : async(client, message, args) => {
        const plus = math.evaluate(args[0]+"+"+args[2]);
       const minus = math.evaluate(args[0]+"-"+args[2]);
@@ -33,12 +33,12 @@ module.exports = {
       .setDescription("```\n"+args[0]+" "+args[1]+" "+args[2]+" "+" = "+multiplier+"\n```\n")
       .setColor(color.toUpperCase());
       
-      if(!args[0]) return message.channel.send("["+client.config.error+"] Input a number to calculate");
-      if(!args[1]) return message.channel.send("["+client.config.error+"] Please specify a type of calculation! (ex: +, x, *, - etc!)");
-      if(!args[2]) return message.channel.send(`[${client.config.error}] Input a number to calculate it with **${args[0]}${args[1]}( put number here C: )`);
+      if(!args[0]) return message.channel.send("["+client.emoji.error+"] Input a number to calculate");
+      if(!args[1]) return message.channel.send("["+client.emoji.error+"] Please specify a type of calculation! (ex: +, x, *, - etc!)");
+      if(!args[2]) return message.channel.send(`[${client.emoji.error}] Input a number to calculate it with **${args[0]}${args[1]}( put number here C: )`);
       
       
-      if(isNaN(args[0]) || isNaN(args[2])) return message.channel.send(`[${client.config.error}] Uh... I really don't know how to calculate a word ;-;`)
+      if(isNaN(args[0]) || isNaN(args[2])) return message.channel.send(`[${client.emoji.error}] Uh... I really don't know how to calculate a word ;-;`)
       
      
 

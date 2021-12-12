@@ -1,11 +1,11 @@
-//Added By KresStew#6666
-
 module.exports = {
     name: "reverse",
     description: "Reverses the given text",
+      usages: "<message>",
+
     run: async(client, message, args) => {
         const text = args.join(" ")
-        if(!text) return message.reply("["+client.config.error+"] Please give something to reverse!")
+        if(!text) return message.reply("["+client.emoji.error+"] Please give something to reverse!")
         let Rarray = text.split("")
         let reverseArray = Rarray.reverse()
         let result = reverseArray.join("")

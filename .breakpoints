@@ -1,3 +1,20 @@
 {
-  "files": {}
+  "files": {
+    "commands/info/leaderboard.js": [
+      {
+        "id": "d4cfbf0f-b1e6-4044-a54f-7e2b26b3c0c7",
+        "line": 121,
+        "version": 69,
+        "index": 4894
+      }
+    ],
+    "html/verified.html": [
+      {
+        "id": "b0a0027f-6d4d-43f0-858b-8ee9da70bb6e",
+        "line": 46,
+        "version": 168,
+        "index": 76231
+      }
+    ]
+  }
 }

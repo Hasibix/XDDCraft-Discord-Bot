@@ -3,9 +3,11 @@ require("dotenv").config();
 
 
 let Schema = new mongoose.Schema({
-   guildid: String,
-   user: String,
-   content: Array
+   Guild: String,
+   User: String,
+   Moderator: String,
+   Reason: String,
+   Timestamp: String
 })
 
 module.exports = mongoose.model('warns', Schema)

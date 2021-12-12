@@ -8,6 +8,8 @@
 			* @param {Message} message 
 			* @param {String[]} args 
 			*/
+        usages: "No args || <mention member>",
+        description: "check your or any other member's balance",
 		run: async(client, message, args) => {
       const member = message.mentions.users.first() || message.author
      const bal = await client.ecobal(member.id);

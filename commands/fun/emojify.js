@@ -7,8 +7,10 @@ module.exports = {
      * @param {Message} message 
      * @param {String[]} args 
      */
+      usages: "<text>",
+    description: "emoji something like 1 - 1️⃣",
     run: async(client, message, args) => {
-        if(!args.length) return message.reply('Please specify a text to translate.')
+        if(!args.length) return message.reply('['+client.emoji.error+'] Please specify a text to translate as emoji.')
         const specialCodes = {
             '0': ':zero:',
             '1': ':one:',

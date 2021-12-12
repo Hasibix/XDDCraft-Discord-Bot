@@ -1,16 +1,17 @@
-const { Client, CommandInteraction } = require("discord.js");
+const { Message, Client, CommandInteraction } = require("discord.js");
 
 module.exports = {
     name: "ping",
-    description: "returns websocket ping",
-    type: 'CHAT_INPUT',
+    aliases: ['p'],
+    description: "lol",
     /**
      *
      * @param {Client} client
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
+    permissions: ["ADMINISTRATOR"],
     run: async (client, interaction, args) => {
-        interaction.followUp({ content: `${client.ws.ping}ms!` });
+        interaction.followUp({ content: `${client.ws.ping} ws ping` });
     },
 };

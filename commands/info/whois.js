@@ -4,6 +4,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports = {
   name: "userinfo",
   aliases: ["about", "whois"],
+  usage: "No args || <mention member>",
   description: "Show User Information!",
   run: async (client, message, args) => {
     let Member = message.mentions.members.first() || message.member;

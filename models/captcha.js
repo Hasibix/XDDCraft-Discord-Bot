@@ -6,6 +6,7 @@ let Schema = new mongoose.Schema({
    Guild: String,
    Roles: String,
    Roles2: String,
+   MemberRole: String,
    Non_VerifyRole: String
 })
 

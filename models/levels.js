@@ -1,23 +1,12 @@
+
 const mongoose = require("mongoose");
-const Schema = new mongoose.Schema({
-    Guild: {
-     type: String,
-     required: true
-    },
-    User: {
-     type: String,
-     required: true
-    },
-    XP: {
-     type: Number,
-     default: 0
-    },
-    Level: {
-     type: Number,
-     default: 0
-    }
+
+const LevelSchema = new mongoose.Schema({
+  User: { type: String },
+  Guild: { type: String },
+  XP: { type: Number, default: 0 },
+  Level: { type: Number, default: 0 },
+  LastUpdated: { type: Date, default: new Date() }
 });
 
-module.exports = mongoose.model(
-  'level', Schema
-)
+module.exports = mongoose.model('level', LevelSchema);

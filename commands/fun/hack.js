@@ -5,6 +5,8 @@ module.exports = {
   name: "hack",
   aliases: ['heck'],
   description: "Hack Member!",
+    usages: "<mention member> || <member id>",
+
   run: async (client, message, args, length) => {
     let Member =
       message.mentions.members.first() ||
@@ -19,11 +21,11 @@ module.exports = {
  
     if (!Member)
       return message.channel.send(
-        `Please Mention A Member That You Want To Hack!`
+        `[${client.emoji.error}] Please mention a member that you want to hack!`
       );
 
     if (Member.user.id === message.author.id)
-      return message.channel.send(`You Can't Hack Your Self Lmao!`);
+      return message.channel.send(`[:rofl:] You Can't Hack Your Self Lmao!`);
     let emailDomains = [
       "gmail.com", 
       "yahoo.com",
@@ -76,36 +78,41 @@ module.exports = {
       .setColor("BLUE")
       .setTitle(`Informations`)
       .setDescription(
-        `**Name:** ${Member.user.tag}\n**Email:** ${emailCode}${emailNumber}@${emailDomain}\n**Password:** ${finalPassword}\n**Token:** Nz${token + token2 + token3 + token4}\n**2FA:** ${twofa}\n**Phone Number:** +${phoneNumber}\n**Money:** ${money}${moneyType}\n**IP Adress:** ${finalIpFromString}
+        `**Name:** ${Member.user.tag}\n**Email:** ${emailCode}${emailNumber}@${emailDomain}\n**Password:** ${finalPassword}\n**Token:** Nz${token + token2 + token3 + token4}\n**2FA:** ${twofa}\n**Phone Number:** +${phoneNumber}\n**Money:** ${await client.ecobal(Member.user.id)} :dollar:\n**Bank:** ${await client.bankBal(Member.user.id)} :dollar:\n**IP Adress:** ${finalIpFromString}
         `
       )
       .setTimestamp();
       
     	let msg = await message.channel.send(`Hacking Started! Hacking ${Member.user.username}`)
 
-    await msg.edit(`Hack Status: 10%`);
+    await msg.edit(`[${client.emoji.warning}] Hack Status: 10%`);
 
-   await  msg.edit(`Hack Status: 20%`);
+   await  msg.edit(`[${client.emoji.warning}] Hack Status: 20%`);
 
-    await msg.edit(`Hack Status: 30%`);
+    await msg.edit(`[${client.emoji.warning}] Hack Status: 30%`);
 
-   await  msg.edit(`Hack Status: 40%`);
+   await  msg.edit(`[${client.emoji.warning}] Hack Status: 40%`);
 
-    await msg.edit(`Hack Status: 50%`);
+    await msg.edit(`[${client.emoji.warning}] Hack Status: 50%`);
 
-    await await msg.edit(`Hack Status: 60%`);
+    await await msg.edit(`[${client.emoji.warning}] Hack Status: 60%`);
 
-   await  msg.edit(`Hack Status: 70%`);
+   await  msg.edit(`[${client.emoji.warning}] Hack Status: 70%`);
 
-   await  msg.edit(`Hack Status: 80%`);
+   await  msg.edit(`[${client.emoji.warning}] Hack Status: 80%`);
 
-   await  msg.edit(`Hack Status: 90%`);
+   await  msg.edit(`[${client.emoji.success}] Hack Status: 90%`);
   
-  await msg.edit("Hack Status: Complete | Wait for informations!");
-
+  await msg.edit("["+client.emoji.success+"] Hack Status: Complete | Wait for informations!");
+  
+  msg.channel.sendTyping()
     setTimeout(function() {
-      msg.edit("Hack Status: Complete");
-      msg.edit({ embeds: [embed] });
+      msg.edit({
+       content: "["+client.emoji.success+"] Hack Status: Complete",
+       embeds: [embed] 
+      }).then(() => {
+        msg.channel.send(`[${client.emoji.success}] _**The all dangerous and critical hackz are completed!**_ Now go to jail! Jk the hack was just for fun. If you take it serious, then go to jail whatever -_-`)
+      });
     }, 3000);
 
     //End

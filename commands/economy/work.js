@@ -9,6 +9,7 @@
 			* @param {Message} message 
 			* @param {String[]} args 
 			*/
+    description: "work and earn some money!",
 		run: async(client, message, args) => {
        const jobs = ["Programmer", "Builder", "Waiter", "Chef", "Bus Driver", "Mechanic", "Doctor", "Twitch Streamer", "Youtuber", "Gamer"];
        const jobIndex = jobs[Math.floor(Math.random() * jobs.length)];

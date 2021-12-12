@@ -5,15 +5,15 @@ module.exports = {
         name: "unmute",
         aliases: ["um"],
         description: "Unmutes a member in the discord!",
+        usage: "<mention member>",
      permissions: ["MANAGE_ROLES"],
     run: async (client, message, args) => {
 
-        if (!message.guild.me.permissions.has("MANAGE_ROLES")) return message.channel.send(`[${client.config.error}] I don't have permissions To unmute Someone ;-; [MANAGE_ROLES]`)
-        if (!args[0]) return message.channel.send("**Please Enter A User!**")
+        if (!message.guild.me.permissions.has("MANAGE_ROLES")) return message.channel.send(`[${client.emoji.error}] I don't have permissions To unmute Someone ;-; [MANAGE_ROLES]`)
+        if (!args[0]) return message.channel.send(`[${client.emoji.error}]Please enter a user!`)
         let mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args[0].toLocaleLowerCase()) || message.guild.members.cache.find(ro => ro.displayName.toLowerCase() === args[0].toLocaleLowerCase());
-        if (!mutee) return message.channel.send(`[${client.config.error}] Please mention a valid user to unmute!`);
+        if (!mutee) return message.channel.send(`[${client.emoji.error}] Please mention a valid user to unmute!`);
 
-        let reason = args.slice(1).join(" ");
 
         let muterole;
         let dbmute = await client.fetchMuteRole(message.guild.id);
@@ -28,11 +28,11 @@ module.exports = {
         let rolefetched = client.fetchMuteId(message.guild.id, mutee.id)
         if (!rolefetched) return;
 
-        if (!muterole) return message.channel.send(`[${client.config.error}] There is no mute role to remove!`)
-        if (!mutee.roles.cache.has(muterole.id)) return message.channel.send(`[${client.config.error}] The user is not muted!`)
+        if (!muterole) return message.channel.send(`[${client.emoji.error}] There is no mute role to remove!`)
+        if (!mutee.roles.cache.has(muterole.id)) return message.channel.send(`[${client.emoji.error}] The user is not muted!`)
         try {
         mutee.roles.remove(muterole.id).then(() => {
-            mutee.send(`**You Have Been Unmuted In ${message.guild.name}**!`).catch(() => null)
+            mutee.send(`**You have been unmuted in ${message.guild.name}**!`).catch(() => null)
             let roleadds = rolefetched
             if (!roleadds) return;
             mutee.roles.add(roleadds)
@@ -43,7 +43,7 @@ module.exports = {
             mutee.roles.add(roleadds2)                            
           }
             
-            message.channel.send(`[${client.config.success}] ${mutee.user.username} was successfully unmuted!`);
+            message.channel.send(`[${client.emoji.success}] ${mutee.user.username} was successfully unmuted!`);
         
     }
 }

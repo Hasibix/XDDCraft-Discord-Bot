@@ -1,13 +1,13 @@
-//Added By Hasibix#0001
-
 const { MessageEmbed } = require("discord.js");
 const { RockPaperScissors } = require("weky")
 module.exports = {
     name: "rps",
     description: "rock, paper, scissors!!",
+      usages: "<mention member (to choose opponent)>",
+
     run: async(client, message, args) => {
     let opponent = message.mentions.users.first();
-    if(!opponent) return message.channel.send(`[${client.config.warning}] Please specify a opponent to play this game!`)
+    if(!opponent) return message.channel.send(`[${client.emoji.warning}] Please specify a opponent to play this game!`)
       await RockPaperScissors({
 	message: message,
 	opponent: opponent,

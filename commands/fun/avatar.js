@@ -6,6 +6,8 @@ module.exports = {
   name: "avatar",
   aliases: ["icon", "pfp"],
   description: "Show Member Avatar!",
+    usages: "No args || <mention member> || <member id>",
+
   run: async (client, message, args) => {
     //Start
     let Member =

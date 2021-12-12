@@ -1,4 +1,4 @@
-const client = require("../index")
+const client = require("../index.js")
 const chatbotschema = require("../models/chat-bot.js")
 const fetch = require('node-fetch');
 
@@ -13,7 +13,8 @@ client.on("messageCreate", async(message) => {
             fetch(`https://api.monkedev.com/fun/chat?msg=${message.content}&uid=${message.author.id}&yr0n57JXpCy7aXlzFmMchuas`)
                 .then(response => response.json())
                 .then(data => {
-                    message.reply(`${data.response}`, { allowedMentions: { repliedUser: false } })
+                    message.reply({ content: `${data.response}`, allowedMentions: { repliedUser: false } })
+
                 })
         }
   })

@@ -8,9 +8,9 @@
 			* @param {Message} message 
 			* @param {String[]} args 
 			*/
-
+     description: 'see the shop items',
 		run: async(client, message, args) => {
-      if(items.length === 0 ) return message.channel.send(`[${client.config.error}] There is no item in shop!`)
+      if(items.length === 0 ) return message.channel.send(`[${client.emoji.error}] There is no item in shop!`)
 
       const shopList = items
       .map((value, index) => {
