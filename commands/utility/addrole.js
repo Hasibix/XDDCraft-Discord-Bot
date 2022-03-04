@@ -5,7 +5,7 @@ module.exports = {
     permissions: ["MANAGE_ROLES"],
         description: "add role to user",
           usages: "<mention member> <mention role>",
-
+category : 'utility',
     run : async(client, message, args) => {
 
         const target = message.mentions.members.first()

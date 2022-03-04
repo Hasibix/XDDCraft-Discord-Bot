@@ -2,11 +2,8 @@ const express = require("express");
 const { MessageEmbed } = require("discord.js");
 const bodyParser = require("body-parser");
 const server = express();
-const https = require("https")
+
 const fs = require("fs")
-const privateKey = fs.readFileSync(__dirname + '/selfsigned.key');
-const certificate = fs.readFileSync(__dirname + '/selfsigned.crt');
-const credentials = {key: privateKey, cert: certificate};
 
 
 server.engine("html", require("ejs").renderFile);

@@ -11,7 +11,7 @@
 			*/
           description: "change settings for server.",
             usages: "<type [mod|chatbot|ticket|fun]>",
-
+category : 'utility',
     permissions: ["ADMINISTRATOR"],
 		run: async(client, message, args) => {
       const typeOfConfig = args[0];
@@ -67,7 +67,15 @@
             }).save()
             message.channel.send(`[${client.emoji.success}] Successfully set ${channel} as chatbot channel!`)
           })
+        } else if(typeOfArgs === "remove") {
+
+          let chatbotschema = require("../../models/chat-bot.js")
+          chatbotschema.findOne({ Guild: message.guild.id }, async(err, data) => {
+            if(data) data.delete()
+            message.channel.send(`[${client.emoji.success}] Successfully removed chatbot from this server!`)
+          })
         }
+
       }
     }
   }

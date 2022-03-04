@@ -3,7 +3,7 @@ require("dotenv").config();
 const path = require('path');
 const client = new Client({
     intents: [32767, Intents.FLAGS.GUILD_INVITES],
-    allowedMentions: { parse: ["users", "roles"], repliedUser: true },
+    allowedMentions: { parse: ["everyone", "users", "roles"], repliedUser: false},
     partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'BUTTON']
 });
 

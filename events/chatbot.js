@@ -13,8 +13,11 @@ client.on("messageCreate", async(message) => {
             fetch(`https://api.monkedev.com/fun/chat?msg=${message.content}&uid=${message.author.id}&yr0n57JXpCy7aXlzFmMchuas`)
                 .then(response => response.json())
                 .then(data => {
-                    message.reply({ content: `${data.response}`, allowedMentions: { repliedUser: false } })
-
+                    message.channel.sendTyping();
+                     setTimeout(() => {
+                       if(!data.response) return;
+                       message.reply({ content: `${data.response.toString()}`, allowedMentions: { repliedUser: false } })
+                     }, 2000)
                 })
         }
   })

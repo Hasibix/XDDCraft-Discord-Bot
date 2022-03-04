@@ -28,10 +28,14 @@ client.on('guildMemberAdd', async (member) => {
     client.config.captcha.settings.callback_url
     }\n after this you will get message about step 2/2.`
   );
-  member.send({
+  try {
+    member.send({
     content: `<@${member.id}> Verification Season Started.`,
     embeds: [embed]
   });
+  } catch(err) {
+    return client.logger.log("Discord: New member doesnt have dms enabled! Need to tell him to enable dms ;-;")
+  }
   
 });
 
